@@ -52,7 +52,7 @@
 				</button>
 			</div>
 
-			<nav class="">
+			<nav class="hidden md:block">
 				<ul class="md:flex space-x-10">
 					<li class:active={$page.path === '/'}>
 						<a
