@@ -15,7 +15,15 @@ import {
 
 // Prod環境の場合はサーバーに設定したENVを使う
 // Dev環境の場合は_configから読み込んだ.envファイルの変数を使う
-let config = {};
+let config = {
+	apiKey: API_KEY,
+	authDomain: AUTH_DOMAIN,
+	projectId: PROJECT_ID,
+	storageBucket: STORAGE_BUCKET,
+	messagingSenderId: MESSAGING_SEND_ID,
+	appId: APP_ID
+};
+
 if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') {
 	config = {
 		apiKey: process.env.API_KEY,
@@ -24,15 +32,6 @@ if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging')
 		storageBucket: process.env.STORAGE_BUCKET,
 		messagingSenderId: process.env.MESSAGING_SEND_ID,
 		appId: process.env.APP_ID
-	};
-} else {
-	config = {
-		apiKey: API_KEY,
-		authDomain: AUTH_DOMAIN,
-		projectId: PROJECT_ID,
-		storageBucket: STORAGE_BUCKET,
-		messagingSenderId: MESSAGING_SEND_ID,
-		appId: APP_ID
 	};
 }
 
