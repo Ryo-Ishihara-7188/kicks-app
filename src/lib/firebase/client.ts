@@ -13,7 +13,6 @@ import {
 	APP_ID
 } from './_config';
 
-// Prod環境の場合はサーバーに設定したENVを使う
 // Dev環境の場合は_configから読み込んだ.envファイルの変数を使う
 let config = {
 	apiKey: API_KEY,
@@ -24,6 +23,7 @@ let config = {
 	appId: APP_ID
 };
 
+// Prod環境の場合はサーバーに設定したENVを使う
 if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') {
 	config = {
 		apiKey: process.env.API_KEY,

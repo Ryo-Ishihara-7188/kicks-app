@@ -3,6 +3,7 @@
 	import { collection, doc, getDoc } from 'firebase/firestore';
 	import { getFunctions, httpsCallable } from 'firebase/functions';
 	import { db } from '$lib/firebase/client';
+	import { userStore } from '$lib/store/user';
 
 	import {
 		getAuth,
@@ -22,6 +23,7 @@
 			if (user) {
 				const uid = user.uid;
 				console.log(uid);
+				$userStore = uid;
 			}
 		});
 	}
@@ -49,6 +51,7 @@
 			const user = result.user;
 			console.log(token);
 			console.log(user);
+			$userStore = user.uid;
 		} catch (error) {
 			const errorCode = error.code;
 			const errorMessage = error.message;
@@ -61,7 +64,7 @@
 
 	onMount(() => {
 		test();
-		// testfunc();
+		currentUser();
 	});
 
 	async function test() {
@@ -82,3 +85,4 @@
 <button on:click={login}>ログイン</button>
 <button on:click={logout}>ログアウト</button>
 <button on:click={currentUser}>ユーザー</button>
+<p>{$userStore}</p>
