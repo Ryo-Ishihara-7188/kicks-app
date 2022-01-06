@@ -1,17 +1,17 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import { fly } from 'svelte/transition';
-	import LoginModal from './LoginModal.svelte';
+	import { page } from '$app/stores'
+	import { fly } from 'svelte/transition'
+	import LoginModal from './LoginModal.svelte'
 
-	let menu = false;
-	let loginModal = false;
+	let menu = false
+	let loginModal = false
 
 	function handleMenu() {
-		menu = !menu;
+		menu = !menu
 	}
 
 	function handleLoginModal() {
-		loginModal = !loginModal;
+		loginModal = !loginModal
 	}
 </script>
 

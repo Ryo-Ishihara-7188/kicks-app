@@ -1,44 +1,25 @@
 <script>
-	import { createEventDispatcher } from 'svelte';
-	import { fly } from 'svelte/transition';
-	import { userStore } from '$lib/store/user';
-	import {
-		getAuth,
-		signInWithPopup,
-		GoogleAuthProvider,
-		signOut,
-		onAuthStateChanged
-	} from 'firebase/auth';
+	import { createEventDispatcher } from 'svelte'
+	import { fly } from 'svelte/transition'
+	import { userStore } from '$lib/store/user'
 
-	const dispatch = createEventDispatcher();
+	import { authentication } from '$lib/repositories/auth'
+
+	const dispatch = createEventDispatcher()
 
 	function close() {
-		dispatch('closeEvent');
+		dispatch('closeEvent')
 	}
 
 	async function handleLogin() {
-		const auth = getAuth();
-		const provider = new GoogleAuthProvider();
-		try {
-			const result = await signInWithPopup(auth, provider);
-			const credential = GoogleAuthProvider.credentialFromResult(result);
-			const token = credential.accessToken;
-
-			// The signed-in user info.
-			const user = result.user;
-			console.log(token);
-			console.log(user);
-			$userStore = user.uid;
-
-			close();
-		} catch (error) {
-			const errorCode = error.code;
-			const errorMessage = error.message;
-			// The email of the user's account used.
-			const email = error.email;
-			// The AuthCredential type that was used.
-			const credential = GoogleAuthProvider.credentialFromError(error);
+		const user = await authentication()
+		if (user === null) {
+			// ログイン失敗
+			return
 		}
+		// ここでStoreに格納
+		// $userStore = user
+		close()
 	}
 </script>
 
