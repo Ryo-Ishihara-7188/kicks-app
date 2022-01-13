@@ -2,8 +2,7 @@
 	import { createEventDispatcher } from 'svelte'
 	import { fly } from 'svelte/transition'
 	import { userStore } from '$lib/store/user'
-
-	import { authentication } from '$lib/repositories/auth'
+	import { authAndCreateUser } from '$lib/services/auth'
 
 	const dispatch = createEventDispatcher()
 
@@ -12,13 +11,13 @@
 	}
 
 	async function handleLogin() {
-		const user = await authentication()
+		const user = await authAndCreateUser()
 		if (user === null) {
 			// ログイン失敗
 			return
 		}
 		// ここでStoreに格納
-		// $userStore = user
+		$userStore = user
 		close()
 	}
 </script>

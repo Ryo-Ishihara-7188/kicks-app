@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/stores'
 	import { fly } from 'svelte/transition'
 	import LoginModal from './LoginModal.svelte'
 
@@ -18,7 +17,7 @@
 <header class="relative bg-white">
 	<div class="max-w-7xl mx-auto px-4 sm:px-6">
 		<div
-			class="flex justify-between items-center border-b-2 border-gray-100 py-6 md:justify-start md:space-x-10"
+			class="flex justify-between items-center border-b-2 border-gray-100 py-2 md:justify-start md:space-x-10"
 		>
 			<div class="flex justify-start lg:w-0 lg:flex-1">
 				<a href="/">
@@ -58,7 +57,7 @@
 				</button>
 			</div>
 
-			<nav class="hidden md:block">
+			<!-- <nav class="hidden md:block">
 				<ul class="md:flex space-x-10">
 					<li class:active={$page.path === '/'}>
 						<a
@@ -97,13 +96,13 @@
 						</a>
 					</li>
 				</ul>
-			</nav>
+			</nav> -->
 
 			<div class="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
 				<button
 					on:click={handleLoginModal}
 					type="button"
-					class="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+					class="whitespace-nowrap inline-flex items-center justify-center px-4 py-1.5 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-500 hover:bg-indigo-600 ease-in-out"
 					aria-expanded="false"
 				>
 					Log in

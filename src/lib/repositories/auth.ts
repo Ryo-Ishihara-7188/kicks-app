@@ -1,10 +1,4 @@
-import {
-	getAuth,
-	signInWithPopup,
-	GoogleAuthProvider,
-	signOut,
-	onAuthStateChanged
-} from 'firebase/auth'
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth'
 
 /**
  * Google loginを実施
@@ -15,11 +9,9 @@ export const authentication = async () => {
 	const provider = new GoogleAuthProvider()
 	try {
 		const result = await signInWithPopup(auth, provider)
-		const credential = GoogleAuthProvider.credentialFromResult(result)
-		const token = credential.accessToken
+		// const credential = GoogleAuthProvider.credentialFromResult(result)
+		// const token = credential.accessToken
 
-		console.log(result)
-		console.log(token)
 		return result.user
 	} catch (error) {
 		console.error(error)
@@ -39,22 +31,4 @@ export const logout = async () => {
 	} catch (error) {
 		return false
 	}
-}
-
-/**
- * ログインユーザー情報を取得する
- */
-export const getCurrentUser = () => {
-	const auth = getAuth()
-	const user = auth.currentUser
-
-	onAuthStateChanged(auth, (user) => {
-		if (user) {
-			return user
-			// const uid = user.uid
-			// console.log(uid)
-			// $userStore = uid
-		}
-		return null
-	})
 }

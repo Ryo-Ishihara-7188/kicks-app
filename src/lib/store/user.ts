@@ -1,6 +1,4 @@
 import { writable } from 'svelte/store'
+import type { User } from '$lib/entities/User'
 
-// TODO: -
-// Userの登録情報を定義して型を作る
-
-export const userStore = writable<any>(null)
+export const userStore = writable<User>(null)
