@@ -4,12 +4,12 @@
 	import LoginModal from './LoginModal.svelte'
 	import { logout } from '$lib/repositories/auth'
 
-	let menu = false
+	let drowerMenu = false
 	let loginModal = false
 	let userMenu = false
 
 	function handleMenu() {
-		menu = !menu
+		drowerMenu = !drowerMenu
 	}
 
 	function handleLoginModal() {
@@ -21,18 +21,18 @@
 	}
 
 	async function handleLogout() {
-		const isLogedOut = logout()
+		const isLogedOut = await logout()
 		if (isLogedOut) {
 			$userStore = null
+			drowerMenu = false
+			userMenu = false
 		}
 	}
 </script>
 
 <header class="relative bg-white">
 	<div class="max-w-7xl mx-auto px-4 sm:px-6">
-		<div
-			class="flex justify-between items-center border-b-2 border-gray-100 py-2 md:justify-start md:space-x-10"
-		>
+		<div class="flex justify-between items-center border-b-2 border-gray-100 py-2 md:space-x-10">
 			<div class="flex justify-start lg:w-0 lg:flex-1">
 				<a href="/">
 					<!-- <span class="sr-only">Kisks app</span>
@@ -45,16 +45,72 @@
 				</a>
 			</div>
 
-			<div class="-mr-2 -my-2 md:hidden">
+			{#if !$userStore}
 				<button
-					on:click={handleMenu}
+					on:click={handleLoginModal}
 					type="button"
-					class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+					class="whitespace-nowrap inline-flex items-center justify-center px-4 py-1.5 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-500 hover:bg-indigo-600 ease-in-out"
 					aria-expanded="false"
 				>
-					<span class="sr-only">Open menu</span>
+					Log in
+				</button>
+			{:else}
+				<!-- mobile -->
+				<div class="-mr-2 -my-2 md:hidden">
+					<button
+						on:click={handleMenu}
+						type="button"
+						class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none"
+						aria-expanded="false"
+					>
+						<svg
+							class="h-6 w-6"
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+							aria-hidden="true"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="2"
+								d="M4 6h16M4 12h16M4 18h16"
+							/>
+						</svg>
+					</button>
+				</div>
+
+				<!-- pc -->
+				<div class="hidden relative md:flex items-center justify-end md:flex-1 lg:w-0">
+					<img
+						on:click={handleUserMenu}
+						class="cursor-pointer rounded-full border-2 p-0.5 w-12 hover:opacity-90"
+						src={$userStore.imageUrl}
+						alt=""
+					/>
+				</div>
+			{/if}
+		</div>
+	</div>
+	{#if loginModal}
+		<LoginModal on:closeEvent={handleLoginModal} />
+	{/if}
+
+	{#if userMenu}
+		<div
+			class="origin-top-right absolute top-14 right-2 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+			role="menu"
+			aria-orientation="vertical"
+			aria-labelledby="menu-button"
+			tabindex="-1"
+			in:fly={{ y: -20, duration: 500 }}
+			out:fly={{ y: -20, duration: 500 }}
+		>
+			<div class="p-4" role="none">
+				<a href="/" class="-m-3 p-3 mb-2 flex items-center rounded-md hover:bg-gray-50">
 					<svg
-						class="h-6 w-6"
+						class="flex-shrink-0 h-6 w-6 text-indigo-600"
 						xmlns="http://www.w3.org/2000/svg"
 						fill="none"
 						viewBox="0 0 24 24"
@@ -65,132 +121,55 @@
 							stroke-linecap="round"
 							stroke-linejoin="round"
 							stroke-width="2"
-							d="M4 6h16M4 12h16M4 18h16"
+							d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
 						/>
 					</svg>
-				</button>
-			</div>
-
-			<!-- <nav class="hidden md:block">
-				<ul class="md:flex space-x-10">
-					<li class:active={$page.path === '/'}>
-						<a
-							sveltekit:prefetch
-							href="/"
-							class="text-base font-medium text-gray-500 hover:text-gray-900"
-						>
-							Solutions
-						</a>
-					</li>
-					<li>
-						<a
-							sveltekit:prefetch
-							href="/"
-							class="text-base font-medium text-gray-500 hover:text-gray-900"
-						>
-							Pricing
-						</a>
-					</li>
-					<li>
-						<a
-							sveltekit:prefetch
-							href="/"
-							class="text-base font-medium text-gray-500 hover:text-gray-900"
-						>
-							Docs
-						</a>
-					</li>
-					<li>
-						<a
-							sveltekit:prefetch
-							href="/"
-							class="text-base font-medium text-gray-500 hover:text-gray-900"
-						>
-							More
-						</a>
-					</li>
-				</ul>
-			</nav> -->
-
-			{#if !$userStore}
-				<div class="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
-					<button
-						on:click={handleLoginModal}
-						type="button"
-						class="whitespace-nowrap inline-flex items-center justify-center px-4 py-1.5 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-500 hover:bg-indigo-600 ease-in-out"
-						aria-expanded="false"
+					<span class="ml-3 text-base font-medium text-gray-900"> Security </span>
+				</a>
+				<a href="/" class="-m-3 p-3 mb-2 flex items-center rounded-md hover:bg-gray-50 border-b">
+					<svg
+						class="flex-shrink-0 h-6 w-6 text-indigo-600"
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+						aria-hidden="true"
 					>
-						Log in
-					</button>
-				</div>
-			{/if}
-
-			{#if $userStore}
-				<div class="hidden relative md:flex items-center justify-end md:flex-1 lg:w-0">
-					<div>
-						<img
-							on:click={handleUserMenu}
-							class="cursor-pointer rounded-full border-2 p-0.5 w-12 hover:opacity-90"
-							src={$userStore.imageUrl}
-							alt=""
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
 						/>
-					</div>
-					{#if userMenu}
-						<div
-							class="origin-top-right absolute top-10 right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
-							role="menu"
-							aria-orientation="vertical"
-							aria-labelledby="menu-button"
-							tabindex="-1"
-							in:fly={{ y: -20, duration: 500 }}
-							out:fly={{ y: -20, duration: 500 }}
-						>
-							<div class="py-1" role="none">
-								<a
-									href="/"
-									class="text-gray-700 block px-4 py-2 text-sm"
-									role="menuitem"
-									tabindex="-1"
-									id="menu-item-0">Account settings</a
-								>
-								<a
-									href="/"
-									class="text-gray-700 block px-4 py-2 text-sm"
-									role="menuitem"
-									tabindex="-1"
-									id="menu-item-1">Support</a
-								>
-								<a
-									href="/"
-									class="text-gray-700 block px-4 py-2 text-sm border-b"
-									role="menuitem"
-									tabindex="-1"
-									id="menu-item-2">License</a
-								>
-								<form method="POST" action="#" role="none">
-									<button
-										on:click={handleLogout}
-										type="submit"
-										class="text-gray-700 block w-full text-left px-4 py-2 text-sm"
-										role="menuitem"
-										tabindex="-1"
-										id="menu-item-3"
-									>
-										Log out
-									</button>
-								</form>
-							</div>
-						</div>
-					{/if}
+					</svg>
+					<span class="ml-3 text-base font-medium text-gray-900"> Security </span>
+				</a>
+				<div
+					on:click={handleLogout}
+					class="-m-3 p-3 mt-1 flex items-center rounded-md hover:bg-gray-50 cursor-pointer"
+				>
+					<svg
+						class="flex-shrink-0 h-6 w-6 text-indigo-600"
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+						aria-hidden="true"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+						/>
+					</svg>
+					<span class="ml-3 text-base font-medium text-gray-900"> Log out </span>
 				</div>
-			{/if}
+			</div>
 		</div>
-	</div>
-	{#if loginModal}
-		<LoginModal on:closeEvent={handleLoginModal} />
 	{/if}
 
-	{#if menu}
+	{#if drowerMenu}
 		<div
 			class="absolute top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden"
 			in:fly={{ x: 100, duration: 500 }}
@@ -316,7 +295,7 @@
 								<span class="ml-3 text-base font-medium text-gray-900"> Integrations </span>
 							</a>
 
-							<a href="/" class="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50">
+							<a href="/" class="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50 border-b">
 								<!-- Heroicon name: outline/refresh -->
 								<svg
 									class="flex-shrink-0 h-6 w-6 text-indigo-600"
@@ -335,40 +314,30 @@
 								</svg>
 								<span class="ml-3 text-base font-medium text-gray-900"> Automations </span>
 							</a>
+
+							<div
+								on:click={handleLogout}
+								class="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50 cursor-pointer"
+							>
+								<!-- Heroicon name: outline/view-grid -->
+								<svg
+									class="flex-shrink-0 h-6 w-6 text-indigo-600"
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor"
+									aria-hidden="true"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+									/>
+								</svg>
+								<span class="ml-3 text-base font-medium text-gray-900"> Log out </span>
+							</div>
 						</nav>
-					</div>
-				</div>
-				<div class="py-6 px-5 space-y-6">
-					<div class="grid grid-cols-2 gap-y-4 gap-x-8">
-						<a href="/" class="text-base font-medium text-gray-900 hover:text-gray-700">
-							Pricing
-						</a>
-
-						<a href="/" class="text-base font-medium text-gray-900 hover:text-gray-700"> Docs </a>
-
-						<a href="/" class="text-base font-medium text-gray-900 hover:text-gray-700">
-							Help Center
-						</a>
-
-						<a href="/" class="text-base font-medium text-gray-900 hover:text-gray-700"> Guides </a>
-
-						<a href="/" class="text-base font-medium text-gray-900 hover:text-gray-700"> Events </a>
-
-						<a href="/" class="text-base font-medium text-gray-900 hover:text-gray-700">
-							Security
-						</a>
-					</div>
-					<div>
-						<a
-							href="/"
-							class="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
-						>
-							Sign up
-						</a>
-						<p class="mt-6 text-center text-base font-medium text-gray-500">
-							Existing customer?
-							<a href="/" class="text-indigo-600 hover:text-indigo-500"> Sign in </a>
-						</p>
 					</div>
 				</div>
 			</div>

@@ -29,7 +29,7 @@
 	aria-modal="true"
 >
 	<div
-		class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+		class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
 	>
 		<div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" />
 
@@ -72,7 +72,7 @@
 					<button
 						on:click={handleLogin}
 						type="button"
-						class="flex w-full rounded-md shadow-sm px-5 py-3 bg-gray-800 text-base font-medium text-white hover:opacity-95 focus:outline-none sm:w-auto sm:text-sm"
+						class="flex justify-center items-center w-full rounded-md shadow-sm px-5 py-3 bg-gray-800 text-base font-medium text-white hover:opacity-95 focus:outline-none sm:w-auto sm:text-sm"
 					>
 						<svg class="mr-2" viewBox="0 0 533.5 544.3" width="18" height="18">
 							<path
@@ -93,7 +93,7 @@
 							/>
 						</svg>
 
-						Login with Google
+						<span> Login with Google </span>
 					</button>
 				</div>
 				<p class="text-xs text-gray-500 leading-5">
