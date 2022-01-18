@@ -1,9 +1,12 @@
 <script lang="ts">
 	import { fly } from 'svelte/transition'
+	import { userStore } from '$lib/store/user'
 	import LoginModal from './LoginModal.svelte'
+	import { logout } from '$lib/repositories/auth'
 
 	let menu = false
 	let loginModal = false
+	let userMenu = false
 
 	function handleMenu() {
 		menu = !menu
@@ -11,6 +14,17 @@
 
 	function handleLoginModal() {
 		loginModal = !loginModal
+	}
+
+	function handleUserMenu() {
+		userMenu = !userMenu
+	}
+
+	async function handleLogout() {
+		const isLogedOut = logout()
+		if (isLogedOut) {
+			$userStore = null
+		}
 	}
 </script>
 
@@ -98,16 +112,78 @@
 				</ul>
 			</nav> -->
 
-			<div class="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
-				<button
-					on:click={handleLoginModal}
-					type="button"
-					class="whitespace-nowrap inline-flex items-center justify-center px-4 py-1.5 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-500 hover:bg-indigo-600 ease-in-out"
-					aria-expanded="false"
-				>
-					Log in
-				</button>
-			</div>
+			{#if !$userStore}
+				<div class="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
+					<button
+						on:click={handleLoginModal}
+						type="button"
+						class="whitespace-nowrap inline-flex items-center justify-center px-4 py-1.5 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-500 hover:bg-indigo-600 ease-in-out"
+						aria-expanded="false"
+					>
+						Log in
+					</button>
+				</div>
+			{/if}
+
+			{#if $userStore}
+				<div class="hidden relative md:flex items-center justify-end md:flex-1 lg:w-0">
+					<div>
+						<img
+							on:click={handleUserMenu}
+							class="cursor-pointer rounded-full border-2 p-0.5 w-12 hover:opacity-90"
+							src={$userStore.imageUrl}
+							alt=""
+						/>
+					</div>
+					{#if userMenu}
+						<div
+							class="origin-top-right absolute top-10 right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+							role="menu"
+							aria-orientation="vertical"
+							aria-labelledby="menu-button"
+							tabindex="-1"
+							in:fly={{ y: -20, duration: 500 }}
+							out:fly={{ y: -20, duration: 500 }}
+						>
+							<div class="py-1" role="none">
+								<a
+									href="/"
+									class="text-gray-700 block px-4 py-2 text-sm"
+									role="menuitem"
+									tabindex="-1"
+									id="menu-item-0">Account settings</a
+								>
+								<a
+									href="/"
+									class="text-gray-700 block px-4 py-2 text-sm"
+									role="menuitem"
+									tabindex="-1"
+									id="menu-item-1">Support</a
+								>
+								<a
+									href="/"
+									class="text-gray-700 block px-4 py-2 text-sm border-b"
+									role="menuitem"
+									tabindex="-1"
+									id="menu-item-2">License</a
+								>
+								<form method="POST" action="#" role="none">
+									<button
+										on:click={handleLogout}
+										type="submit"
+										class="text-gray-700 block w-full text-left px-4 py-2 text-sm"
+										role="menuitem"
+										tabindex="-1"
+										id="menu-item-3"
+									>
+										Log out
+									</button>
+								</form>
+							</div>
+						</div>
+					{/if}
+				</div>
+			{/if}
 		</div>
 	</div>
 	{#if loginModal}

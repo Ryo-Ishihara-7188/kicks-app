@@ -3,13 +3,7 @@
 	import '../app.css'
 	import Header from '$lib/components/Header.svelte'
 	import { userStore } from '$lib/store/user'
-	import {
-		getAuth,
-		signInWithPopup,
-		GoogleAuthProvider,
-		signOut,
-		onAuthStateChanged
-	} from 'firebase/auth'
+	import { getAuth, onAuthStateChanged } from 'firebase/auth'
 	import { getUserDataByUid } from '$lib/services/user'
 
 	onMount(() => {
